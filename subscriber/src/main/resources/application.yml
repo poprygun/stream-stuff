@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        input:
+          destination: soundbits
+          group: soundbitsGroup
+
+
