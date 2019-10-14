@@ -11,6 +11,20 @@ Span data from publisher and subscriber services should appear in [zipkin consol
 
 ## Gatling Stress Test
 
+### Prerequisites
+
+- Install sbt
+
+```bash
+brew isntall sbt
+```
+
+- Use java 12
+
+```bash
+jenv local 12
+```
+
 ### Install Gatling AMQP Plugin to local Maven repository
 
 ```bash
@@ -28,5 +42,9 @@ sbt compile
 See `PublishExample.scala` for RabbitMQ configuration.
 
 Run `LoadRunner.scala` to start stress test.
+
+```bash
+sbt run
+```
 
 Monitor RabbitMQ in [Console](http://localhost:15672/#/)
