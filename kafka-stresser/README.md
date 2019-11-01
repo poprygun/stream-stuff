@@ -11,6 +11,12 @@ Messages are posted to kafka topic called `soundbits`
 
 ## Setup
 
+Start Kafka
+```bash
+zkserver start
+kafka-server-start /usr/local/etc/kafka/server.properties
+```
+
 Run
 
 ```bash
