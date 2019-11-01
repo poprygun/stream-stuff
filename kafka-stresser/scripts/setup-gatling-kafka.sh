@@ -7,6 +7,12 @@ function set_bash_fail_on_error() {
     set -o pipefail
 }
 
+function copy_simulations() {
+    go_to_kafka_stresser_target_directory
+
+    cp -r ../gatling-kafka/src/test/scala/ gatling-charts-highcharts-bundle-3.3.0/user-files/simulations
+}
+
 function create_target_directory() {
     mkdir -p target
 }
@@ -43,6 +49,7 @@ function main() {
     get_gatling_bundle
     build_gatling_kafka
     install_gatling_kafka_to_gatling_bundle
+    copy_simulations
 }
 
 main

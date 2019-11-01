@@ -6,7 +6,7 @@ import scala.concurrent.duration._
 
 import com.github.mnogu.gatling.kafka.Predef._
 
-class BasicSimulation extends Simulation {
+class ChachkiesPublishSimulation extends Simulation {
   val kafkaConf = kafka
     // Kafka topic name
     .topic("soundbits")
