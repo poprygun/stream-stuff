@@ -14,11 +14,14 @@ function copy_simulations() {
 }
 
 function create_target_directory() {
-    mkdir -p target
+    local -r root_directory=$(git rev-parse --show-toplevel)
+    cd "$root_directory"
+
+    mkdir -p kafka-stresser/target
 }
 
 function go_to_kafka_stresser_target_directory() {
-    root_directory=$(git rev-parse --show-toplevel)
+    local -r root_directory=$(git rev-parse --show-toplevel)
 
     cd "$root_directory/kafka-stresser/target"
 }

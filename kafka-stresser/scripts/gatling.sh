@@ -8,7 +8,7 @@ function set_bash_fail_on_error() {
 }
 
 function go_to_kafka_stresser_target_directory() {
-    root_directory=$(git rev-parse --show-toplevel)
+    local -r root_directory=$(git rev-parse --show-toplevel)
 
     cd "$root_directory/kafka-stresser/target/gatling-charts-highcharts-bundle-3.3.0"
 }
