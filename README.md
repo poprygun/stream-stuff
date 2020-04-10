@@ -48,3 +48,9 @@ sbt run
 ```
 
 Monitor RabbitMQ in [Console](http://localhost:15672/#/)
+
+Simulate load 
+```bash
+curl -s "localhost:8080/sayit?[1-10]"
+```
+
