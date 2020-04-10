@@ -32,20 +32,9 @@ cd gatling-amqp-plugin/
 sbt publishM2
 ```
 
-### Amqp Stresser configuration
+### Loader configuration
 
-```bash
-cd amqp-stresser
-sbt compile
-```
-
-See `PublishExample.scala` for RabbitMQ configuration.
-
-Run `LoadRunner.scala` to start stress test.
-
-```bash
-sbt run
-```
+see gatling-runner/README.md
 
 Monitor RabbitMQ in [Console](http://localhost:15672/#/)
 
