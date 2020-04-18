@@ -17,4 +17,13 @@ spring:
 
   application:
     name: publisher
+  main:
+    allow-bean-definition-overriding: true
+
+logging:
+  level:
+    org.springframework: debug
+  thread:
+    format: <%thread>
+
 

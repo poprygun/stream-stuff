@@ -29,6 +29,6 @@ class MessagingConfiguration {
 class Poliglot{
 	@StreamListener(Sink.INPUT)
 	public void handleMessage(Message<String> message) {
-		log.info("Received: {}.", message.getPayload());
+		log.info("Received: {} {}", message.getHeaders(), message.getPayload());
 	}
 }
