@@ -43,3 +43,8 @@ Simulate load
 curl -s "localhost:8080/sayit?[1-10]"
 ```
 
+## To start minikube
+
+```bash
+minikube start --memory=8192 --cpus=2 --kubernetes-version=v1.18.0 --vm-driver=hyperkit --bootstrapper=kubeadm --extra-config=apiserver.enable-admission-plugins="LimitRanger,NamespaceExists,NamespaceLifecycle,ResourceQuota,ServiceAccount,DefaultStorageClass,MutatingAdmissionWebhook"
+```

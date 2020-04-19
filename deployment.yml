@@ -1,0 +1,166 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+spec:
+  ports:
+  - port: 5672
+    protocol: TCP
+    targetPort: 5672
+  selector:
+    run: rabbitmq
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-manage
+spec:
+  ports:
+  - port: 15672
+    protocol: TCP
+    targetPort: 15672
+    nodePort: 31672    
+  selector:
+    run: rabbitmq
+  type: NodePort  
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: rabbitmq
+  name: rabbitmq
+spec:
+  containers:
+  - image: rabbitmq:management
+    name: rabbitmq
+    ports:
+    - containerPort: 5672
+    - containerPort: 15672    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: zipkin
+  name: zipkin
+spec:
+  ports:
+  - port: 9411
+    protocol: TCP
+    targetPort: 9411
+    nodePort: 31411
+  selector:
+    run: zipkin
+  type: NodePort
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: zipkin
+  name: zipkin
+spec:
+  containers:
+  - image: openzipkin/zipkin
+    name: zipkin
+    ports:
+    - containerPort: 9411
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: publisher
+  name: publisher
+spec:
+  initContainers:
+  - name: init-rabbitmq
+    image: busybox:1.28
+    command: ['sh', '-c', "echo Initializing...;sleep 20s;"]
+  containers:
+  - image: ashumilov/publisher
+    name: publisher
+    ports:
+    - containerPort: 8080
+    imagePullPolicy: Always    
+    env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: k8s
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: subscriber-publisher
+  name: subscriber-publisher
+spec:
+  initContainers:
+  - name: init-rabbitmq
+    image: busybox:1.28
+    command: ['sh', '-c', "echo Initializing...;sleep 20s;"]
+  containers:
+  - image: ashumilov/subscriber-publisher
+    name: subscriber-publisher
+    ports:
+    - containerPort: 8080
+    imagePullPolicy: Always    
+    env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: k8s
+    - name: SPRING_APPLICATION_NAME
+      value: subscriber-publisher1
+    - name: INTPUT_CHANNEL
+      value: soundbits-span1
+    - name: OUTPUT_CHANNEL
+      value: soundbits-span2           
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: subscriber-publisher2
+  name: subscriber-publisher2
+spec:
+  initContainers:
+  - name: init-rabbitmq
+    image: busybox:1.28
+    command: ['sh', '-c', "echo Initializing...;sleep 20s;"]
+  containers:
+  - image: ashumilov/subscriber-publisher
+    name: subscriber-publisher2
+    ports:
+    - containerPort: 8080
+    imagePullPolicy: Always    
+    env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: k8s
+    - name: SPRING_APPLICATION_NAME
+      value: subscriber-publisher2
+    - name: INTPUT_CHANNEL
+      value: soundbits-span2
+    - name: OUTPUT_CHANNEL
+      value: soundbits-span3       
+---        
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: subscriber
+  name: subscriber
+spec:
+  initContainers:
+  - name: init-rabbitmq
+    image: busybox:1.28
+    command: ['sh', '-c', "echo Initializing...;sleep 20s;"]
+  containers:
+  - image: ashumilov/subscriber
+    name: subscriber
+    ports:
+    - containerPort: 8080
+    imagePullPolicy: Always    
+    env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: k8s
+    - name: INPUT_CHANNEL
+      value: soundbits-span3

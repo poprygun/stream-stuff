@@ -49,7 +49,9 @@ class ChatterBox {
 
     @Scheduled(initialDelay = 1000, fixedRate = 10000)
     public void saySomething() {
-        soundbitsChannel.send(MessageBuilder.withPayload("I am talking to ya... " + Instant.now()).build());
+        final Instant now = Instant.now();
+        log.info("Publishing message at {}", now);
+        soundbitsChannel.send(MessageBuilder.withPayload("I am talking to ya... " + now).build());
     }
 }
 

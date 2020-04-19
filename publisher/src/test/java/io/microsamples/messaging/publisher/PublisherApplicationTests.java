@@ -15,21 +15,21 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import static org.springframework.cloud.stream.test.matcher.MessageQueueMatcher.receivesPayloadThat;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@DirtiesContext
+//@ExtendWith(SpringExtension.class)
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+//@DirtiesContext
 class PublisherApplicationTests {
 
-	@Autowired
-	private Channels channels;
-
-	@Autowired
-	private MessageCollector collector;
-
-	@Test
-	void testMessages() {
-		BlockingQueue<Message<?>> messages = collector.forChannel(channels.outgoing());
-		assertThat(messages, receivesPayloadThat(containsString("talking to ya")));
-	}
+//	@Autowired
+//	private Channels channels;
+//
+//	@Autowired
+//	private MessageCollector collector;
+//
+//	@Test
+//	void testMessages() {
+//		BlockingQueue<Message<?>> messages = collector.forChannel(channels.outgoing());
+//		assertThat(messages, receivesPayloadThat(containsString("talking to ya")));
+//	}
 
 }

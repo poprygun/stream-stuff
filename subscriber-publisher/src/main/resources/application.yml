@@ -3,8 +3,10 @@ spring:
     stream:
       bindings:
         input:
-          destination: ${INPUT_CHANNEL}
+          destination: ${INTPUT_CHANNEL}
           group: soundbitsGroup
+        soundbitsChannel:
+          destination: ${OUTPUT_CHANNEL}
 
   zipkin:
     enabled: true
@@ -17,7 +19,11 @@ spring:
       probability: 1.0
 
   application:
-    name: subscriber
+    name: subscriber-publisher
+
+logging:
+  level:
+    org.springframework: info
 ---
 spring:
   profiles:

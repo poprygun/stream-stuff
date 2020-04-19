@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>io.microsamples.messaging</groupId>
-    <artifactId>subscriber</artifactId>
+    <artifactId>subscriber-publisher</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>subscriber</name>
+    <name>subscriber-publisher</name>
     <description>Demo project for Spring Cloud Stream Subscriber</description>
 
     <properties>
@@ -83,7 +83,7 @@
                 <version>2.2.0</version>
                 <configuration>
                     <to>
-                        <image>docker.io/ashumilov/subscriber</image>
+                        <image>docker.io/ashumilov/subscriber-publisher</image>
                     </to>
                 </configuration>
                 <executions>
