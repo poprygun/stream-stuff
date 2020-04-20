@@ -164,3 +164,36 @@ spec:
       value: k8s
     - name: INPUT_CHANNEL
       value: soundbits-span3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: http-listener
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    run: http-listener
+---        
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: http-listener
+  name: http-listener
+spec:
+  initContainers:
+  - name: init-rabbitmq
+    image: busybox:1.28
+    command: ['sh', '-c', "echo Initializing...;sleep 20s;"]  
+  containers:
+  - image: ashumilov/http-listener
+    name: http-listener
+    ports:
+    - containerPort: 8080
+    imagePullPolicy: Always  
+    env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: k8s

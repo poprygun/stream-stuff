@@ -14,5 +14,6 @@
         <module>publisher</module>
         <module>subscriber</module>
         <module>subscriber-publisher</module>
+        <module>http-listener</module>
     </modules>
 </project>

@@ -18,6 +18,10 @@ spring:
 
   application:
     name: subscriber
+
+http-listener:
+  url: http://localhost:8383
+
 ---
 spring:
   profiles:
@@ -27,3 +31,6 @@ spring:
 
   zipkin:
     base-url: http://zipkin:9411/
+
+http-listener:
+  url: http://http-listener:8080
