@@ -1,18 +1,25 @@
 package io.microsamples.messaging.publisher;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.amqp.support.converter.SimpleMessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,6 +36,7 @@ public class PublisherApplication {
 
 @RestController
 @AllArgsConstructor
+@Profile("pubsub")
 class PubController {
 
     private final MessageChannel soundbitsChannel;
@@ -40,27 +48,33 @@ class PubController {
     }
 }
 
-//@Component
-//@AllArgsConstructor
-//@Slf4j
-//class ChatterBox {
-//
-//    private final MessageChannel soundbitsChannel;
-//
-//    @Scheduled(initialDelay = 1000, fixedRate = 10000)
-//    public void saySomething() {
-//        final Instant now = Instant.now();
-//        log.info("Publishing message at {}", now);
-//        soundbitsChannel.send(MessageBuilder.withPayload("I am talking to ya... " + now).build());
-//    }
-//}
+@RestController
+@Profile("sync")
+class SyncController {
 
-@Configuration
-@EnableBinding(Channels.class)
-@EnableScheduling
-class MessagingConfiguration {
+    private final RabbitTemplate rabbitTemplate;
 
+    @Value("${spring.cloud.stream.bindings.soundbitsChannel.destination}")
+    private String syncExchange;
+
+    public SyncController(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
+
+    @GetMapping("/sayit")
+    public ResponseEntity sayIt() {
+
+        final Object response = rabbitTemplate
+                .convertSendAndReceive(
+                        syncExchange
+                        , "soundbits.key"
+                        , "Processing GET Request... " + Instant.now()
+                );
+
+        return ResponseEntity.ok("Publisher: Response received. " + response.toString());
+    }
 }
+
 
 interface Channels {
     @Output("soundbitsChannel")

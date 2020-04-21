@@ -1,22 +1,31 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
+  name: subscriber
   labels:
     run: subscriber
-  name: subscriber
 spec:
-  initContainers:
-  - name: init-rabbitmq
-    image: busybox:1.28
-    command: ['sh', '-c', "echo Initializing...;sleep 20s;"]
-  containers:
-  - image: ashumilov/subscriber
-    name: subscriber
-    ports:
-    - containerPort: 8080
-    imagePullPolicy: Always    
-    env:
-    - name: SPRING_PROFILES_ACTIVE
-      value: k8s
-    - name: INPUT_CHANNEL
-      value: soundbits-span3
+  replicas: 1
+  selector:
+    matchLabels:
+      run: subscriber
+  template:
+    metadata:
+      labels:
+        run: subscriber
+    spec:
+      initContainers:
+      - name: init-rabbitmq
+        image: busybox:1.28
+        command: ['sh', '-c', "echo Initializing...;sleep 20s;"]
+      containers:
+      - name: subscriber
+        image: ashumilov/subscriber
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: k8s,sync
+        - name: INPUT_CHANNEL
+          value: soundbits-span3

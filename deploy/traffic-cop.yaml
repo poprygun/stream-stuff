@@ -30,7 +30,12 @@ spec:
       mountPath: /data/reports
     env:
     - name: REPORTS_DIR
-      value: /data/reports      
+      value: /data/reports
+    resources:
+      requests:
+        memory: "1024Mi"
+      limits:
+        memory: "1024Mi"
   volumes:
   - name: reports-storage
     emptyDir: {}

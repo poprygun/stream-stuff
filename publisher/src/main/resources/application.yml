@@ -4,10 +4,9 @@ spring:
       bindings:
         soundbitsChannel:
           destination: soundbits-span1
-
   zipkin:
     base-url: http://localhost:9411/
-    enabled: true
+    enabled: false
     sender:
       type: web
 
@@ -19,12 +18,15 @@ spring:
     name: publisher
   main:
     allow-bean-definition-overriding: true
+server:
+  port: 8181
 ---
 spring:
-  profiles:
-    active: k8s
+  profiles: k8s
   rabbitmq:
     host: rabbitmq
 
   zipkin:
     base-url: http://zipkin:9411/
+server:
+  port: 8080

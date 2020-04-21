@@ -1,53 +1,49 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
+  name: subscriber-publisher
   labels:
     run: subscriber-publisher
-  name: subscriber-publisher
 spec:
-  initContainers:
-  - name: init-rabbitmq
-    image: busybox:1.28
-    command: ['sh', '-c', "echo Initializing...;sleep 20s;"]
-  containers:
-  - image: ashumilov/subscriber-publisher
-    name: subscriber-publisher
-    ports:
-    - containerPort: 8080
-    imagePullPolicy: Always    
-    env:
-    - name: SPRING_PROFILES_ACTIVE
-      value: k8s
-    - name: SPRING_APPLICATION_NAME
-      value: subscriber-publisher1
-    - name: INTPUT_CHANNEL
-      value: soundbits-span1
-    - name: OUTPUT_CHANNEL
-      value: soundbits-span2           
----
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    run: subscriber-publisher2
-  name: subscriber-publisher2
-spec:
-  initContainers:
-  - name: init-rabbitmq
-    image: busybox:1.28
-    command: ['sh', '-c', "echo Initializing...;sleep 20s;"]
-  containers:
-  - image: ashumilov/subscriber-publisher
-    name: subscriber-publisher2
-    ports:
-    - containerPort: 8080
-    imagePullPolicy: Always    
-    env:
-    - name: SPRING_PROFILES_ACTIVE
-      value: k8s
-    - name: SPRING_APPLICATION_NAME
-      value: subscriber-publisher2
-    - name: INTPUT_CHANNEL
-      value: soundbits-span2
-    - name: OUTPUT_CHANNEL
-      value: soundbits-span3
+  replicas: 1
+  selector:
+    matchLabels:
+      run: subscriber-publisher
+  template:
+    metadata:
+      labels:
+        run: subscriber-publisher
+    spec:
+      initContainers:
+      - name: init-rabbitmq
+        image: busybox:1.28
+        command: ['sh', '-c', "echo Initializing...;sleep 20s;"]
+      containers:
+      - name: subscriber-publisher
+        image: ashumilov/subscriber-publisher
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: k8s,sync
+        - name: SPRING_APPLICATION_NAME
+          value: subscriber-publisher1
+        - name: INTPUT_CHANNEL
+          value: soundbits-span1
+        - name: OUTPUT_CHANNEL
+          value: soundbits-span2
+      - name: subscriber-publisher2
+        image: ashumilov/subscriber-publisher
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: k8s,sync
+        - name: SPRING_APPLICATION_NAME
+          value: subscriber-publisher2
+        - name: INTPUT_CHANNEL
+          value: soundbits-span2
+        - name: OUTPUT_CHANNEL
+          value: soundbits-span3          
