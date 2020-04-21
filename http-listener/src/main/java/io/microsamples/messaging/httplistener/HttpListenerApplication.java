@@ -24,12 +24,21 @@ public class HttpListenerApplication {
 @Slf4j
 class ListenerController {
 
+	private Long count = 0l ;
+
 	@GetMapping("/echo")
 	public ResponseEntity echo(@RequestParam(defaultValue = "0") int delay) throws InterruptedException {
 		TimeUnit.SECONDS.sleep(delay);
-		final String response = "Echo message...";
+		count += 1;
+		final String response = "Echo message...number " + count;
 		log.info(response);
 		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/reset")
+	public ResponseEntity reset(){
+		count = 0l;
+		return ResponseEntity.ok("Counter Reseted.");
 	}
 }
 

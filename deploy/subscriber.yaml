@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: subscriber
+  name: subscriber
+spec:
+  initContainers:
+  - name: init-rabbitmq
+    image: busybox:1.28
+    command: ['sh', '-c', "echo Initializing...;sleep 20s;"]
+  containers:
+  - image: ashumilov/subscriber
+    name: subscriber
+    ports:
+    - containerPort: 8080
+    imagePullPolicy: Always    
+    env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: k8s
+    - name: INPUT_CHANNEL
+      value: soundbits-span3

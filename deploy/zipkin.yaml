@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: zipkin
+  name: zipkin
+spec:
+  ports:
+  - port: 9411
+    protocol: TCP
+    targetPort: 9411
+    nodePort: 31411
+  selector:
+    run: zipkin
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zipkin
+  labels:
+    run: zipkin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: zipkin
+  template:
+    metadata:
+      labels:
+        run: zipkin
+    spec:
+      containers:
+      - name: zipkin
+        image: openzipkin/zipkin
+        ports:
+        - containerPort: 9411
+        imagePullPolicy: Always

@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: traffic-cop
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+    nodePort: 31889    
+  selector:
+    run: traffic-cop
+  type: NodePort  
+---       
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: traffic-cop
+  name: traffic-cop
+spec:
+  containers:
+  - image: ashumilov/traffic-cop
+    name: traffic-cop
+    ports:
+    - containerPort: 8080
+    imagePullPolicy: Always  
+    volumeMounts:
+    - name: reports-storage
+      mountPath: /data/reports
+    env:
+    - name: REPORTS_DIR
+      value: /data/reports      
+  volumes:
+  - name: reports-storage
+    emptyDir: {}
+        

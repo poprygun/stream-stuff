@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: publisher
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+    nodePort: 31999    
+  selector:
+    run: publisher
+  type: NodePort    
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: publisher
+  labels:
+    run: publisher
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: publisher
+  template:
+    metadata:
+      labels:
+        run: publisher
+    spec:
+      initContainers:
+      - name: init-rabbitmq
+        image: busybox:1.28
+        command: ['sh', '-c', "echo Initializing...;sleep 20s;"]
+      containers:
+      - name: publisher
+        image: ashumilov/publisher
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: k8s
