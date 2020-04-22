@@ -48,3 +48,24 @@ curl -s "localhost:8080/sayit?[1-10]"
 ```bash
 minikube start --memory=8192 --cpus=2 --kubernetes-version=v1.18.0 --vm-driver=hyperkit --bootstrapper=kubeadm --extra-config=apiserver.enable-admission-plugins="LimitRanger,NamespaceExists,NamespaceLifecycle,ResourceQuota,ServiceAccount,DefaultStorageClass,MutatingAdmissionWebhook"
 ```
+
+## Install Prometheus
+
+```bash
+brew install helm
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm install my-prometheus stable/prometheus
+export POD_NAME=$(kubectl get pods --namespace default -l "app=prometheus,component=server" -o jsonpath="{.items[0].metadata.name}")
+kubectl --namespace default port-forward $POD_NAME 9090
+```
+
+## Install Grafana
+
+```bash
+helm install my-grafana stable/grafana
+kubectl get secret --namespace default my-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=my-grafana" -o jsonpath="{.items[0].metadata.name}")
+kubectl --namespace default port-forward $POD_NAME 3000
+```
+

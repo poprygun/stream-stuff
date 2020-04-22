@@ -5,6 +5,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.amqp.support.converter.SimpleMessageConverter;
 import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -26,6 +27,6 @@ public class MessagingConfiguration {
     }
 }
 @Configuration
-@EnableBinding({Channels.class})
+@EnableBinding({Sink.class, Channels.class})
 @Profile("pubsub")
 class PubSubConfiguration{}

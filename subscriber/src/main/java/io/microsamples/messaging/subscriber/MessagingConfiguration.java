@@ -50,7 +50,7 @@ public class MessagingConfiguration {
 }
 
 @Configuration
-@EnableBinding({Sink.class})
+@EnableBinding({Sink.class, Channels.class})
 @Profile("pubsub")
 class PubSubConfiguration{
     @Bean

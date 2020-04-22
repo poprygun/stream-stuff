@@ -11,6 +11,12 @@ spring:
 
   application:
     name: http-listener
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 ---
 spring:
   profiles: k8s

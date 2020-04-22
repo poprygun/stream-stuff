@@ -1,7 +1,7 @@
 package io.microsamples.messaging.publisher;
 
 import lombok.AllArgsConstructor;
-import org.springframework.amqp.core.Message;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -12,10 +12,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Output;
+import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.messaging.support.MessageBuilder;
@@ -37,6 +40,7 @@ public class PublisherApplication {
 @RestController
 @AllArgsConstructor
 @Profile("pubsub")
+@Slf4j
 class PubController {
 
     private final MessageChannel soundbitsChannel;
@@ -45,6 +49,12 @@ class PubController {
     public ResponseEntity sayIt() {
         soundbitsChannel.send(MessageBuilder.withPayload("Processing GET Request... " + Instant.now()).build());
         return ResponseEntity.ok("Request processed.");
+    }
+
+
+    @StreamListener(Sink.INPUT)
+    public void handleMessage(Message<String> message) {
+        log.info("Received response from http-listener {}", message.getPayload());
     }
 }
 
