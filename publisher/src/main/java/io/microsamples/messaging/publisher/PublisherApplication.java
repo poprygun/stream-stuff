@@ -60,6 +60,7 @@ class PubController {
 
 @RestController
 @Profile("sync")
+@Slf4j
 class SyncController {
 
     private final RabbitTemplate rabbitTemplate;
@@ -80,8 +81,9 @@ class SyncController {
                         , "soundbits.key"
                         , "Processing GET Request... " + Instant.now()
                 );
-
-        return ResponseEntity.ok("Publisher: Response received. " + response.toString());
+        final String rtn = "Publisher: Response received. " + response.toString();
+        log.info(rtn);
+        return ResponseEntity.ok(rtn);
     }
 }
 

@@ -29,6 +29,9 @@ management:
     web:
       exposure:
         include: "*"
+  metrics:
+    tags:
+      application: publisher
 ---
 spring:
   profiles: k8s

@@ -19,10 +19,14 @@ import org.springframework.web.client.RestTemplate;
 @Profile("sync")
 public class MessagingConfiguration {
 
+    @Value("${amqp.sync.reply.timeout:20000}")
+    private long replyTimeout;
+
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory){
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(new SimpleMessageConverter());
+        rabbitTemplate.setReplyTimeout(replyTimeout);
         return rabbitTemplate;
     }
 

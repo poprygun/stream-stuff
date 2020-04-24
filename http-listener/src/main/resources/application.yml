@@ -13,6 +13,9 @@ spring:
     name: http-listener
 
 management:
+  metrics:
+    tags:
+      application: http-listener
   endpoints:
     web:
       exposure:

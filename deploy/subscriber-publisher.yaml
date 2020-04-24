@@ -33,6 +33,8 @@ spec:
           value: soundbits-span1
         - name: OUTPUT_CHANNEL
           value: soundbits-span2
+        - name: SPRING_ZIPKIN_ENABLED
+          value: "true"
       - name: subscriber-publisher2
         image: ashumilov/subscriber-publisher
         ports:
@@ -47,3 +49,5 @@ spec:
           value: soundbits-span2
         - name: OUTPUT_CHANNEL
           value: soundbits-span3          
+        - name: SPRING_ZIPKIN_ENABLED
+          value: "true"

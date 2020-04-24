@@ -45,6 +45,8 @@ spec:
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: k8s,pubsub
+        - name: SPRING_ZIPKIN_ENABLED
+          value: "true"          
         resources:
           requests:
             memory: "1024Mi"

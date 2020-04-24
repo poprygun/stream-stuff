@@ -60,13 +60,14 @@ class SyncPoliglot{
 
 	@RabbitListener(queues = "${spring.cloud.stream.bindings.input.destination}")
 	public String handleMessage(String message){
-		log.info("receved {}", message);
+		log.info("Receved {}", message);
 		final String response = (String)rabbitTemplate
 				.convertSendAndReceive(
 						syncExchange
 						, "soundbits.key"
 						, "Processing GET Request... " + Instant.now()
 				);
+		log.info("Sent from subscriber publisher {}", message);
 		return "SubscriberPublisher: " + response;
 	}
 }

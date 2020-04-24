@@ -29,3 +29,5 @@ spec:
           value: k8s,pubsub
         - name: INPUT_CHANNEL
           value: soundbits-span3
+        - name: SPRING_ZIPKIN_ENABLED
+          value: "true"
