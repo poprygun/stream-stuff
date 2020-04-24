@@ -1,0 +1,8 @@
+label: message-sent
+input:
+  triggeredBy: sendIt()
+outputMessage:
+  sentTo: soundbits-span1
+  body: "Processing GET Request... "
+  headers:
+    contentType: text/plain

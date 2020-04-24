@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        soundbitsChannel:
+          destination: soundbits-span1
+#        input:
+#          destination: response-channel
+#          group: soundbitsGroup
+
+stubrunner:
+  amqp:
+    enabled: true
+  stream:
+    enabled: false
+  integration:
+    enabled: false
