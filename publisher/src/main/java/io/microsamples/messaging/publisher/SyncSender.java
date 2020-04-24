@@ -17,12 +17,12 @@ public class SyncSender {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendIt(){
-        rabbitTemplate
-                .convertAndSend(
+    public Object sendIt(){
+        return  rabbitTemplate
+                .convertSendAndReceive(
                         syncExchange
                         , "soundbits.key"
-                        , "Processing GET Request... "
+                        , "Processing GET Request... " + Instant.now()
                 );
     }
 }

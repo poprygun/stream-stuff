@@ -64,12 +64,11 @@ class SyncController {
     @GetMapping("/sayit")
     public ResponseEntity sayIt() {
 
-//        final Object response = syncSender.sendIt();
-//
-//        final String rtn = "Publisher: Response received. " + response.toString();
-//        log.info(rtn);
-//        return ResponseEntity.ok(rtn);
-        return null;
+        final Object response = syncSender.sendIt();
+
+        final String rtn = "Publisher: Response received. " + response.toString();
+        log.info(rtn);
+        return ResponseEntity.ok(rtn);
     }
 }
 
