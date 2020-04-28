@@ -26,7 +26,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: SPRING_PROFILES_ACTIVE
-          value: k8s,pubsub
+          value: k8s,sync
         - name: SPRING_APPLICATION_NAME
           value: subscriber-publisher1
         - name: INTPUT_CHANNEL
@@ -42,7 +42,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: SPRING_PROFILES_ACTIVE
-          value: k8s,pubsub
+          value: k8s,sync
         - name: SPRING_APPLICATION_NAME
           value: subscriber-publisher2
         - name: INTPUT_CHANNEL

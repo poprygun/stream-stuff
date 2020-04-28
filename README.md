@@ -9,38 +9,26 @@ docker run -d --name some-rabbit -p 5672:5672 -p 5673:5673 -p 15672:15672 rabbit
 
 Span data from publisher and subscriber services should appear in [zipkin console](http://localhost:9411/zipkin)
 
-## Gatling Stress Test
+## Gatling Stress Test - [Traffic Cop](https://github.com/walterscarborough/traffic-cop)
 
-### Prerequisites
+Follow Traffic Cop README for setup details.
 
-- Install sbt
-
-```bash
-brew isntall sbt
-```
-
-- Use java 12
+## Simulate load
 
 ```bash
-jenv local 12
-```
-
-### Install Gatling AMQP Plugin to local Maven repository
-
-```bash
-cd gatling-amqp-plugin/
-sbt publishM2
-```
-
-### Loader configuration
-
-see gatling-runner/README.md
-
-Monitor RabbitMQ in [Console](http://localhost:15672/#/)
-
-Simulate load 
-```bash
-curl -s "localhost:8080/sayit?[1-10]"
+curl --location --request POST 'http://192.168.64.4:31889/run-load-test' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "baseUrl": "http://192.168.64.4:31999",
+    "endpoint": "/sayit",
+    "httpMethod": "GET",
+    "payload": "{}",
+    "constantUsersPerSecond": 20,
+    "constantUsersPerSecondDuration": 10,
+    "rampUsersPerSecondMinimum": 20,
+    "rampUsersPerSecondMaximum": 20,
+    "rampUsersPerSecondDuration": 20
+}'
 ```
 
 ## To start minikube
@@ -48,6 +36,8 @@ curl -s "localhost:8080/sayit?[1-10]"
 ```bash
 minikube start --memory=8192 --cpus=2 --kubernetes-version=v1.18.0 --vm-driver=hyperkit --bootstrapper=kubeadm --extra-config=apiserver.enable-admission-plugins="LimitRanger,NamespaceExists,NamespaceLifecycle,ResourceQuota,ServiceAccount,DefaultStorageClass,MutatingAdmissionWebhook"
 ```
+
+_Follow instructions to install Prometheus and Grafana using Helm_
 
 ## Install Prometheus
 
@@ -69,3 +59,17 @@ export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/nam
 kubectl --namespace default port-forward $POD_NAME 3000
 ```
 
+### Grafana console can now be accessed via http://localhost:3000
+
+
+## Use following links to access tools running on Minikube
+
+### Determine minikube IP
+
+```bash
+export MINIKUBE_IP=$(minikube ip)
+```
+
+[zipkin](http://MINIKUBE_IP:31411/)
+[rabbit mq console](http://MINIKUBE_IP:31672)
+[traffic cop reports](http://MINIKUBE_IP:31889/reports)

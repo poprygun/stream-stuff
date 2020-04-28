@@ -26,7 +26,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: SPRING_PROFILES_ACTIVE
-          value: k8s,pubsub
+          value: k8s,sync
         - name: INPUT_CHANNEL
           value: soundbits-span3
         - name: SPRING_ZIPKIN_ENABLED
